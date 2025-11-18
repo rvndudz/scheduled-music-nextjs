@@ -1,37 +1,16 @@
 [
   {
-    "event_id": "event_seed",
-    "event_name": "Morning Set",
-    "artist_name": "Codex DJ",
-    "start_time_utc": "2025-11-18T06:00:00.000Z",
-    "end_time_utc": "2025-11-18T07:00:00.000Z",
-    "tracks": [
-      {
-        "track_id": "track_seed",
-        "track_name": "Sunrise Groove",
-        "track_url": "https://example-bucket.r2.dev/sunrise-groove.mp3",
-        "track_duration_seconds": 180
-      }
-    ]
-  },
-  {
-    "event_id": "cf851128-9dd3-49cc-a5bb-96f0e65de688",
+    "event_id": "99c71c66-0911-4c11-8328-2646609c3cc2",
     "event_name": "test",
     "artist_name": "test",
-    "start_time_utc": "2025-11-18T13:15:00.000Z",
-    "end_time_utc": "2025-11-19T13:15:00.000Z",
+    "start_time_utc": "2025-11-18T14:06:00.000+00:00",
+    "end_time_utc": "2025-11-19T14:06:00.000+00:00",
     "tracks": [
       {
-        "track_id": "0d70eb9a-642b-4238-b35d-271e595bb8cb",
+        "track_id": "214c125b-2660-414c-9aa6-68ac7ca547b9",
         "track_name": "horror",
-        "track_url": "https://audio-live.r2.dev/tracks/0d70eb9a-642b-4238-b35d-271e595bb8cb-horror.mp3",
+        "track_url": "https://pub-5fdeab8f68f54d4a976fe22c1201fbb0.r2.dev/audio-live/tracks/214c125b-2660-414c-9aa6-68ac7ca547b9-horror.mp3",
         "track_duration_seconds": 148
-      },
-      {
-        "track_id": "8e338de2-8251-41a8-af17-b3c40f6bc5c0",
-        "track_name": "christmas",
-        "track_url": "https://audio-live.r2.dev/tracks/8e338de2-8251-41a8-af17-b3c40f6bc5c0-christmas.mp3",
-        "track_duration_seconds": 113
       }
     ]
   }

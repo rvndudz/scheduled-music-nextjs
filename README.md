@@ -39,8 +39,9 @@ Full-stack Next.js application that lets admins upload MP3 tracks to Cloudflare 
   | --- | --- |
   | `R2_ACCESS_KEY` | Cloudflare R2 access key ID |
   | `R2_SECRET_KEY` | Cloudflare R2 secret |
-  | `R2_BUCKET` | Public bucket name (used for the `https://<bucket>.r2.dev` URL) |
-  | `R2_ENDPOINT` | S3-compatible endpoint, e.g. `https://<accountid>.r2.cloudflarestorage.com` |
+| `R2_BUCKET` | Public bucket name used for uploads |
+| `R2_ENDPOINT` | S3-compatible endpoint, e.g. `https://<accountid>.r2.cloudflarestorage.com` |
+| `R2_PUBLIC_BASE_URL` | Public base URL for served files, e.g. `https://pub-xxxxx.r2.dev/audio-live` (falls back to `https://<bucket>.r2.dev`) |
 
 ### Testing Notes
 
