@@ -30,6 +30,8 @@ Lightweight Next.js console for curating scheduled playlists that can power in-g
 
 4. Visit [http://localhost:3000/upload-event](http://localhost:3000/upload-event) to schedule a new playlist.
 
+> Want a companion Unity listener? Check out [rvndudz/scheduled-music-unity](https://github.com/rvndudz/scheduled-music-unity) for a minimal client that consumes the JSON schedule and streams the published MP3s inside your scene.
+
 ### Data & Storage
 
 - Events are appended to `data/events.json`. Seed data is provided so the API always has a valid JSON file.
