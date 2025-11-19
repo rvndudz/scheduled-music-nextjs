@@ -8,6 +8,7 @@ import {
   type ChangeEvent,
   type FormEvent,
 } from "react";
+import Image from "next/image";
 import type { EventRecord } from "@/types/events";
 import {
   convertSriLankaInputToUtc,
@@ -391,7 +392,17 @@ const ManageEventsPage = () => {
                   }`}
                 >
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                    <div>
+                    <div className="flex flex-col gap-3">
+                      {eventRecord.cover_image_url ? (
+                        <Image
+                          src={eventRecord.cover_image_url}
+                          alt={`${eventRecord.event_name} cover`}
+                          width={112}
+                          height={112}
+                          unoptimized
+                          className="h-28 w-28 rounded-2xl border border-slate-700/70 object-cover"
+                        />
+                      ) : null}
                       <h3 className="text-lg font-semibold text-white">
                         {eventRecord.event_name}
                       </h3>

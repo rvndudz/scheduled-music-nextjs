@@ -12,4 +12,5 @@ export interface EventRecord {
   start_time_utc: string;
   end_time_utc: string;
   tracks: TrackRecord[];
+  cover_image_url?: string;
 }

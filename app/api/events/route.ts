@@ -30,7 +30,10 @@ export async function DELETE() {
     if (existing.length) {
       try {
         await deleteObjectsForUrls(
-          existing.flatMap((event) => event.tracks.map((track) => track.track_url)),
+          existing.flatMap((event) => [
+            ...event.tracks.map((track) => track.track_url),
+            ...(event.cover_image_url ? [event.cover_image_url] : []),
+          ]),
         );
       } catch (error) {
         console.error("Failed to delete track files while clearing events:", error);

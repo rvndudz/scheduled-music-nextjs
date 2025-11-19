@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { convertSriLankaInputToUtc } from "@/lib/timezone";
 
 const initialFormState = {
@@ -21,8 +22,18 @@ const createClientId = () =>
 export default function UploadEventPage() {
   const [formValues, setFormValues] = useState(initialFormState);
   const [queuedTracks, setQueuedTracks] = useState([]);
+  const [coverImage, setCoverImage] = useState(null);
+  const [coverPreview, setCoverPreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState(null);
+
+  useEffect(() => {
+    return () => {
+      if (coverPreview) {
+        URL.revokeObjectURL(coverPreview);
+      }
+    };
+  }, [coverPreview]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -32,10 +43,39 @@ export default function UploadEventPage() {
   const resetForm = () => {
     setFormValues(initialFormState);
     setQueuedTracks([]);
+    if (coverPreview) {
+      URL.revokeObjectURL(coverPreview);
+    }
+    setCoverImage(null);
+    setCoverPreview(null);
     setStatus({
       type: "info",
       text: "Form cleared. No mixes are queued anymore.",
     });
+  };
+
+  const handleCoverChange = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+    if (coverPreview) {
+      URL.revokeObjectURL(coverPreview);
+    }
+    setCoverImage(file);
+    setCoverPreview(URL.createObjectURL(file));
+    setStatus({
+      type: "success",
+      text: "Cover image queued for upload.",
+    });
+  };
+
+  const removeCover = () => {
+    if (coverPreview) {
+      URL.revokeObjectURL(coverPreview);
+    }
+    setCoverImage(null);
+    setCoverPreview(null);
   };
 
   const queueTracks = (event) => {
@@ -151,6 +191,33 @@ export default function UploadEventPage() {
       return;
     }
 
+    let coverImageUrl;
+    if (coverImage) {
+      const formData = new FormData();
+      formData.append("file", coverImage);
+      try {
+        const response = await fetch("/api/upload-cover", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data?.error ?? "Unable to upload cover image.");
+        }
+        coverImageUrl = data.cover_image_url;
+      } catch (error) {
+        setIsSubmitting(false);
+        setStatus({
+          type: "error",
+          text:
+            error instanceof Error
+              ? error.message
+              : "Failed to upload cover image.",
+        });
+        return;
+      }
+    }
+
     try {
       const response = await fetch("/api/create-event", {
         method: "POST",
@@ -161,6 +228,7 @@ export default function UploadEventPage() {
           start_time_utc: normalizedTimes.start,
           end_time_utc: normalizedTimes.end,
           tracks: uploadedTracks,
+          ...(coverImageUrl ? { cover_image_url: coverImageUrl } : {}),
         }),
       });
 
@@ -176,6 +244,7 @@ export default function UploadEventPage() {
       });
       setFormValues(initialFormState);
       setQueuedTracks([]);
+      removeCover();
     } catch (error) {
       setStatus({
         type: "error",
@@ -290,6 +359,44 @@ export default function UploadEventPage() {
               We will upload the queued files after you hit “Save event.” Feel
               free to add multiple mixes before publishing.
             </p>
+          </section>
+
+          <section>
+            <label className="mb-1 block text-sm font-semibold text-slate-300">
+              Cover image (PNG/JPEG/WebP)
+            </label>
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              className="block w-full cursor-pointer rounded-2xl border border-dashed border-slate-700/70 bg-slate-900/60 px-4 py-5 text-center text-base font-medium text-slate-200 transition hover:border-indigo-500/60 hover:text-white"
+              onChange={handleCoverChange}
+              disabled={isSubmitting}
+            />
+            {coverPreview ? (
+              <div className="mt-3 flex items-center gap-4">
+                <Image
+                  src={coverPreview}
+                  alt="Cover preview"
+                  width={80}
+                  height={80}
+                  unoptimized
+                  className="h-20 w-20 rounded-2xl border border-slate-700/70 object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={removeCover}
+                  className="rounded-xl border border-rose-500/40 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-rose-200 transition hover:bg-rose-500/10"
+                  disabled={isSubmitting}
+                >
+                  Remove cover
+                </button>
+              </div>
+            ) : (
+              <p className="mt-2 text-sm text-slate-400">
+                A cover image helps players identify events quickly in your
+                in-game menus.
+              </p>
+            )}
           </section>
 
           <section>

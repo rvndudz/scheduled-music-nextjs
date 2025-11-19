@@ -21,8 +21,14 @@ export async function POST(request: Request) {
     } catch {
       throw new ValidationError("Invalid JSON payload.");
     }
-    const { event_name, artist_name, start_time_utc, end_time_utc, tracks } =
-      payload;
+    const {
+      event_name,
+      artist_name,
+      start_time_utc,
+      end_time_utc,
+      tracks,
+      cover_image_url,
+    } = payload;
 
     if (typeof event_name !== "string" || !event_name.trim()) {
       throw new ValidationError("event_name is required.");
@@ -41,6 +47,11 @@ export async function POST(request: Request) {
 
     const normalizedTracks = ensureTracks(tracks);
 
+    let coverUrl: string | undefined;
+    if (typeof cover_image_url === "string" && cover_image_url.trim()) {
+      coverUrl = cover_image_url.trim();
+    }
+
     const newEvent: EventRecord = {
       event_id: randomUUID(),
       event_name: event_name.trim(),
@@ -48,6 +59,7 @@ export async function POST(request: Request) {
       start_time_utc: startIso,
       end_time_utc: endIso,
       tracks: normalizedTracks,
+      ...(coverUrl ? { cover_image_url: coverUrl } : {}),
     };
 
     const existingEvents = await readEventsFile();

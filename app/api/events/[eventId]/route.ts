@@ -84,6 +84,17 @@ export async function PUT(request: Request, context: RouteParams) {
       updatedEvent.tracks = ensureTracks(payload.tracks);
     }
 
+    if ("cover_image_url" in payload) {
+      const coverUrl = payload.cover_image_url;
+      if (coverUrl === null || coverUrl === undefined || coverUrl === "") {
+        delete updatedEvent.cover_image_url;
+      } else if (typeof coverUrl === "string" && coverUrl.trim()) {
+        updatedEvent.cover_image_url = coverUrl.trim();
+      } else {
+        throw new ValidationError("cover_image_url must be a string if provided.");
+      }
+    }
+
     if (
       new Date(updatedEvent.end_time_utc).getTime() <=
       new Date(updatedEvent.start_time_utc).getTime()
@@ -129,9 +140,10 @@ export async function DELETE(_request: Request, context: RouteParams) {
     ];
 
     try {
-      await deleteObjectsForUrls(
-        deletedEvent.tracks.map((track) => track.track_url),
-      );
+      await deleteObjectsForUrls([
+        ...deletedEvent.tracks.map((track) => track.track_url),
+        ...(deletedEvent.cover_image_url ? [deletedEvent.cover_image_url] : []),
+      ]);
     } catch (error) {
       console.error(`Failed to delete track files for event ${eventId}:`, error);
       return NextResponse.json(
