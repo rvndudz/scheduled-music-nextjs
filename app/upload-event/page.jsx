@@ -273,20 +273,6 @@ const resetForm = () => {
           </p>
         </header>
 
-        {status ? (
-          <div
-            className={`mb-6 rounded-2xl border px-4 py-3 text-sm font-medium ${
-              status.type === "error"
-                ? "border-[#ff5c5c]/70 bg-[#ff5c5c]/15 text-[#ffdada]"
-                : status.type === "success"
-                  ? "border-[#ffcf4d]/60 bg-[#ffcf4d]/15 text-[#fff3d6]"
-                  : "border-[#ff9fb0]/50 bg-white/10 text-[#ffe1ea]"
-            }`}
-          >
-            {status.text}
-          </div>
-        ) : null}
-
         <form className="space-y-8" onSubmit={submitEvent}>
           <section className="grid gap-4 md:grid-cols-2">
             <div>

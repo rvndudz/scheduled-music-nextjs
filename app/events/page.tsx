@@ -677,7 +677,7 @@ const cancelEditing = () => {
                                 ? `${track.track_bitrate_kbps} kbps`
                                 : null,
                               (track.track_size_bytes ?? 0) > 0
-                                ? `${(track.track_size_bytes / 1024 / 1024).toFixed(2)} MB`
+                                ? `${((track.track_size_bytes ?? 0) / 1024 / 1024).toFixed(2)} MB`
                                 : null,
                             ]
                               .filter(Boolean)
