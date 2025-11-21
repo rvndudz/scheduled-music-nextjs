@@ -561,7 +561,11 @@ const cancelEditing = () => {
                       <p className="text-sm text-rose-50/80">
                         {eventRecord.artist_name}
                       </p>
-                      {isDefaultEvent(eventRecord) ? null : (
+                      {isDefaultEvent(eventRecord) ? (
+                        <p className="text-xs font-semibold uppercase tracking-wide text-amber-200">
+                          Default mix — plays all day whenever nothing else is scheduled.
+                        </p>
+                      ) : (
                         <>
                           <p className="text-sm text-rose-50/80">
                             {formatSriLankaDateTime(eventRecord.start_time_utc)} &rarr;{" "}
